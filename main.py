@@ -13,11 +13,20 @@ class SudokuGUI:
         self.create_widgets()
 
     def create_widgets(self):
-        self.canvas = tk.Canvas(self.root, width=360, height=360)
+        self.frame = tk.Frame(self.root)
+        self.frame.pack()
+
+        self.canvas = tk.Canvas(self.frame, width=360, height=360)
         self.canvas.pack()
 
-        self.solve_button = tk.Button(self.root, text="Solve", command=self.solve_sudoku)
-        self.solve_button.pack()
+        self.solve_button = tk.Button(self.frame, text="Solve", command=self.solve_sudoku)
+        self.solve_button.pack(side=tk.LEFT, padx=5)
+
+        self.load_example_button = tk.Button(self.frame, text="Load Example", command=self.load_example)
+        self.load_example_button.pack(side=tk.LEFT, padx=5)
+
+        self.reset_button = tk.Button(self.frame, text="Reset", command=self.reset_board)
+        self.reset_button.pack(side=tk.LEFT, padx=5)
 
         self.draw_board()
 
@@ -30,7 +39,7 @@ class SudokuGUI:
                 y1 = y0 + 40
                 self.canvas.create_rectangle(x0, y0, x1, y1, outline="black")
 
-                entry = tk.Entry(self.root, textvariable=self.board[i][j], font=('Arial', 16), justify='center')
+                entry = tk.Entry(self.frame, textvariable=self.board[i][j], font=('Arial', 16), justify='center')
                 entry.place(x=x0 + 10, y=y0 + 10, width=20, height=20)
 
     def solve_sudoku(self):
@@ -68,6 +77,28 @@ class SudokuGUI:
         cbar.set_label("Number")
 
         plt.show()
+
+    def load_example(self):
+        example_puzzle = [
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+        ]
+
+        for i in range(9):
+            for j in range(9):
+                self.board[i][j].set(example_puzzle[i][j])
+
+    def reset_board(self):
+        for i in range(9):
+            for j in range(9):
+                self.board[i][j].set('')
 
 class SudokuBoard:
     def __init__(self, board):
